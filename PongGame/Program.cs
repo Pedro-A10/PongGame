@@ -24,6 +24,8 @@ namespace PongGame
             //Points
             int playerPoints = 0;
             int computerPoints = 0;
+            //Font
+            Font font = new Font("Arial", 40, FontStyle.Bold);
 
             public PongFrame()
             {
@@ -77,7 +79,11 @@ namespace PongGame
                 //Right - IA :
                 e.Graphics.DrawRectangle(whitePen, 945, barComputer, 20, 100);
                 e.Graphics.FillRectangle(whiteBrush, 945, barComputer, 20, 100);
-        
+
+                //Points Viwer
+                e.Graphics.DrawString(computerPoints.ToString(), font, whiteBrush, 935, 10);
+                e.Graphics.DrawString(playerPoints.ToString(), font, whiteBrush, 0, 10);
+
                 whitePen.Dispose();
                 whiteBrush.Dispose();
             }
