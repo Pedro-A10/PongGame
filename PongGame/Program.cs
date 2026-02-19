@@ -21,10 +21,13 @@ namespace PongGame
             int barComputer;
             //Moviment
             bool goUp, goDown;
+            //Points
+            int playerPoints = 0;
+            int computerPoints = 0;
 
             public PongFrame()
             {
-                //Janela
+                //Frame
                 this.Text = "Pong Game";
                 this.Width = 1000;
                 this.Height = 800;
@@ -58,11 +61,11 @@ namespace PongGame
                 using Brush whiteBrush = new SolidBrush(Color.White);
                 using var whitePen = new Pen(Color.White, 2);
 
-                //Linha:
+                //Line:
                 e.Graphics.DrawLine(whitePen, centerX, 0, centerX, this.ClientSize.Height);
 
-                //Bola:
-                //posição:
+                //Ball:
+                //Position:
                 e.Graphics.DrawEllipse(whitePen, ballX, ballY, ballSize, ballSize);
 
                 e.Graphics.FillEllipse(whiteBrush, ballX, ballY, ballSize, ballSize);
@@ -74,11 +77,20 @@ namespace PongGame
                 //Right - IA :
                 e.Graphics.DrawRectangle(whitePen, 945, barComputer, 20, 100);
                 e.Graphics.FillRectangle(whiteBrush, 945, barComputer, 20, 100);
-
+        
                 whitePen.Dispose();
                 whiteBrush.Dispose();
             }
-            //Movimento
+            //Reset ball
+            private void resetBall()
+            {
+                ballX = this.ClientSize.Width / 2 - 17;
+                ballY = this.ClientSize.Height / 2 - 17;
+
+                ballXSpeed = ballXSpeed > 0 ? -8 : 8;
+                ballYSpeed = 8;
+            }
+            //Moviment
             private void KeyIsDown(object sender, KeyEventArgs e)
             {
                 if (e.KeyCode == Keys.Down || e.KeyCode == Keys.S)
@@ -101,7 +113,6 @@ namespace PongGame
                     goUp = false;
                 }
             }
-
             //GameLoop
             private void GameTimerEvent(object sender, EventArgs e)
             {
@@ -160,6 +171,18 @@ namespace PongGame
                     ballXSpeed = -ballXSpeed;
                 }
 
+                //Points
+                if(ballX < 0)
+                {
+                    computerPoints++;
+                    resetBall();
+                }
+                if(ballX + 35 > this.ClientSize.Width)
+                {
+                    playerPoints++;
+                    resetBall();
+                }
+                
                 Invalidate();
             }
         }
