@@ -8,12 +8,18 @@ namespace PongGame
     {
         class PongFrame : Form
         {
-            int ballXSpeed = 4;
-            int ballYSpeed = 4;
+            //ball
+            int ballXSpeed = 8;
+            int ballYSpeed = 8;
             int ballX;
             int ballY;
+            //Player
             int barPlayerSpeed = 6;
             int barPlayer;
+            //Computer
+            int barComputerSpeed = 6;
+            int barComputer;
+            //Moviment
             bool goUp, goDown;
 
             public PongFrame()
@@ -29,6 +35,7 @@ namespace PongGame
                 ballY = this.ClientSize.Height / 2;
 
                 barPlayer = this.ClientSize.Height / 2;
+                barComputer = this.ClientSize.Height / 2;
 
                 //Loop
                 Timer gameTimer = new Timer();
@@ -65,8 +72,8 @@ namespace PongGame
                 e.Graphics.FillRectangle(whiteBrush, 20, barPlayer, 20, 100);
 
                 //Right - IA :
-                e.Graphics.DrawRectangle(whitePen, 945, 127, 20, 100);
-                e.Graphics.FillRectangle(whiteBrush, 945, 127, 20, 100);
+                e.Graphics.DrawRectangle(whitePen, 945, barComputer, 20, 100);
+                e.Graphics.FillRectangle(whiteBrush, 945, barComputer, 20, 100);
 
                 whitePen.Dispose();
                 whiteBrush.Dispose();
@@ -74,27 +81,27 @@ namespace PongGame
             //Movimento
             private void KeyIsDown(object sender, KeyEventArgs e)
             {
-                if (e.KeyCode == Keys.Down)
+                if (e.KeyCode == Keys.Down || e.KeyCode == Keys.S)
                 {
                     goDown = true;
                 }
-                if (e.KeyCode == Keys.Up)
+                if (e.KeyCode == Keys.Up || e.KeyCode == Keys.W)
                 {
                     goUp = true;
                 }
-
             }
             private void KeyIsUp(object sender, KeyEventArgs e)
             {
-                if(e.KeyCode == Keys.Down)
+                if(e.KeyCode == Keys.Down || e.KeyCode == Keys.S)
                 {
                     goDown = false;
                 }
-                if(e.KeyCode == Keys.Up)
+                if(e.KeyCode == Keys.Up || e.KeyCode == Keys.W)
                 {
                     goUp = false;
                 }
             }
+
             //GameLoop
             private void GameTimerEvent(object sender, EventArgs e)
             {
@@ -105,6 +112,11 @@ namespace PongGame
                 //Collision
                 Rectangle ballRect = new Rectangle(ballX, ballY, 35, 35);
                 Rectangle playerRect = new Rectangle(20, barPlayer, 20, 100);
+                Rectangle computerRect = new Rectangle(945, barComputer, 20, 100);
+
+                //IA bar
+                int ballCenter = ballY + 17;
+                int computerCenter = barComputer + 50;
 
                 if (ballY <= 0 || ballY + 35 >= this.ClientSize.Height)
                 {
@@ -115,7 +127,7 @@ namespace PongGame
                     ballXSpeed = -ballXSpeed;
                 }
 
-                //bars moviment
+                //bar moviment Player
                 if (goUp && barPlayer > 0)
                 {
                     barPlayer -= barPlayerSpeed;
@@ -125,8 +137,25 @@ namespace PongGame
                     barPlayer += barPlayerSpeed;
                 }
 
+                //Computer moviment 
+                if (ballXSpeed > 0)
+                {
+                    if(ballCenter < computerCenter && barComputer > 0)
+                    {
+                        barComputer -= barComputerSpeed;
+                    }
+                    else if(ballCenter > computerCenter && barComputer + 100 < this.ClientSize.Height)
+                    {
+                        barComputer += barComputerSpeed;
+                    }
+                }
+
                 //Collision
                 if (ballRect.IntersectsWith(playerRect))
+                {
+                    ballXSpeed = -ballXSpeed;
+                }
+                if (ballRect.IntersectsWith(computerRect))
                 {
                     ballXSpeed = -ballXSpeed;
                 }
