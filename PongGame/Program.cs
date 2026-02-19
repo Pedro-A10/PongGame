@@ -24,6 +24,7 @@ namespace PongGame
                 this.Height = 800;
                 this.BackColor = Color.Black;
 
+                //Objects in game
                 ballX = this.ClientSize.Width / 2;
                 ballY = this.ClientSize.Height / 2;
 
@@ -101,6 +102,10 @@ namespace PongGame
                 ballX += ballXSpeed;
                 ballY += ballYSpeed;
 
+                //Collision
+                Rectangle ballRect = new Rectangle(ballX, ballY, 35, 35);
+                Rectangle playerRect = new Rectangle(20, barPlayer, 20, 100);
+
                 if (ballY <= 0 || ballY + 35 >= this.ClientSize.Height)
                 {
                     ballYSpeed = -ballYSpeed;
@@ -118,6 +123,12 @@ namespace PongGame
                 if (goDown && barPlayer + 100 < this.ClientSize.Height)
                 {
                     barPlayer += barPlayerSpeed;
+                }
+
+                //Collision
+                if (ballRect.IntersectsWith(playerRect))
+                {
+                    ballXSpeed = -ballXSpeed;
                 }
 
                 Invalidate();
