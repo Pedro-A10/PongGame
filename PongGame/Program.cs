@@ -12,6 +12,8 @@ namespace PongGame
             int ballYSpeed = 4;
             int ballX;
             int ballY;
+            int barPlayerSpeed = 6;
+            int barPlayer;
             bool goUp, goDown;
 
             public PongFrame()
@@ -24,6 +26,8 @@ namespace PongGame
 
                 ballX = this.ClientSize.Width / 2;
                 ballY = this.ClientSize.Height / 2;
+
+                barPlayer = this.ClientSize.Height / 2;
 
                 //Loop
                 Timer gameTimer = new Timer();
@@ -56,8 +60,8 @@ namespace PongGame
                 e.Graphics.FillEllipse(whiteBrush, ballX, ballY, ballSize, ballSize);
 
                 //Left - Player:
-                e.Graphics.DrawRectangle(whitePen, 20, 127, 20, 100);
-                e.Graphics.FillRectangle(whiteBrush, 20, 127, 20, 100);
+                e.Graphics.DrawRectangle(whitePen, 20, barPlayer, 20, 100);
+                e.Graphics.FillRectangle(whiteBrush, 20, barPlayer, 20, 100);
 
                 //Right - IA :
                 e.Graphics.DrawRectangle(whitePen, 945, 127, 20, 100);
@@ -93,10 +97,11 @@ namespace PongGame
             //GameLoop
             private void GameTimerEvent(object sender, EventArgs e)
             {
+                //ball speed
                 ballX += ballXSpeed;
                 ballY += ballYSpeed;
 
-                if (ballY <= 0|| ballY + 35 >= this.ClientSize.Height)
+                if (ballY <= 0 || ballY + 35 >= this.ClientSize.Height)
                 {
                     ballYSpeed = -ballYSpeed;
                 }
@@ -104,6 +109,17 @@ namespace PongGame
                 {
                     ballXSpeed = -ballXSpeed;
                 }
+
+                //bars moviment
+                if (goUp && barPlayer > 0)
+                {
+                    barPlayer -= barPlayerSpeed;
+                }
+                if (goDown && barPlayer + 100 < this.ClientSize.Height)
+                {
+                    barPlayer += barPlayerSpeed;
+                }
+
                 Invalidate();
             }
         }
