@@ -34,6 +34,7 @@ namespace PongGame
                 this.Width = 1000;
                 this.Height = 800;
                 this.BackColor = Color.Black;
+                this.DoubleBuffered = true;
 
                 //Objects in game
                 ballX = this.ClientSize.Width / 2;
